@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class PipeController : MonoBehaviour {
@@ -10,7 +10,7 @@ public class PipeController : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		pontas = GetComponentsInChildren<PontaController>();
-	}
+	}	
 	
 	// Update is called once per frame
 	public void Rotation () {
@@ -19,7 +19,7 @@ public class PipeController : MonoBehaviour {
 
 	public void ListennerWater(){
 		foreach(PontaController ponta in pontas){
-			if(ponta.getHaveWater){
+			if(ponta.getHaveWater()){
 				waterInPipe = true;
 			}
 		}
