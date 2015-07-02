@@ -2,47 +2,53 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class Seed : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
+public class Trash : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
 	public Transform parentToReturnTo = null;
-	public GameObject mountain;
+	public GameObject street;
 
+	public GameObject phStreet;
+	public int x;
+	
 	void Awake(){
-		mountain = FindObjectOfType<Mountain> ().gameObject;
+		street = FindObjectOfType<Street> ().gameObject;
 	}
+
+
+	void OnDestroy(){
+		phStreet.transform.SetParent (street.transform);
+		phStreet.transform.SetSiblingIndex (x);
+		phStreet.SetActive (true);
+	}
+
 
 	public void OnBeginDrag(PointerEventData eventData){
 		print("BeginDrag");
 		GetComponent<CanvasGroup> ().blocksRaycasts = false;
 		parentToReturnTo = transform.parent;
-
+		
 		transform.SetParent (transform.parent.parent);
+
+		phStreet.transform.SetParent (street.transform);
+		phStreet.transform.SetSiblingIndex (x);
+		phStreet.SetActive (true);
 	}
+
 	public int childIndex;
 	public void OnDrag(PointerEventData eventData){
 		print("Drag");
-
-		
 		transform.position = eventData.position;
-
-		for(int i=0; i < mountain.transform.childCount; i++) {
-			if(this.transform.position.x < mountain.transform.GetChild(i).position.x+45 && this.transform.position.y > mountain.transform.GetChild(i).position.y-45) {
-				
-				print ("ola"+i);
-				
-
-				childIndex = i;
-				
-				break;
-			}
-		}
-
-			
+	
 	}
+
 	
 	public void OnEndDrag(PointerEventData eventData){
 		print("EndDrag");
 		GetComponent<CanvasGroup> ().blocksRaycasts = true;
 		transform.SetParent (parentToReturnTo);
+		transform.SetSiblingIndex (x);
+
+		phStreet.transform.SetParent (gameObject.transform.parent.parent);
+		phStreet.SetActive (false);
 	}
 	
 }
